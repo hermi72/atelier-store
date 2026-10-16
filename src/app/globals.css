@@ -1,0 +1,269 @@
+@import "tailwindcss";
+
+/*
+ * Atelier design system
+ * Monochrome, image-led luxury retail: white canvas, black ink, one muted
+ * accent, hairline borders, square corners, small tracked uppercase labels
+ * paired with a large serif display face. Tokens below generate Tailwind
+ * utilities (bg-paper, text-ink, border-line, text-label, p-gutter, max-w-page…).
+ */
+
+@theme {
+  /* ---------- Color ---------- */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-paper: #ffffff; /* page background */
+  --color-surface: #f4f3f1; /* product image wells, subtle panels */
+  --color-surface-strong: #e9e7e3;
+  --color-ink: #111111; /* primary text, primary buttons */
+  --color-ink-soft: #3d3d3d;
+  --color-muted: #6f6f6f; /* secondary text, prices on sale lists, meta */
+  --color-subtle: #a3a3a3; /* placeholders, disabled */
+  --color-line: #e3e1dd; /* hairline dividers and borders */
+  --color-line-strong: #111111; /* input focus, outlined buttons */
+  --color-accent: #6e1f2a; /* used sparingly: sale, badges, selection */
+  --color-success: #2f5d3a;
+  --color-danger: #a1271b;
+  --color-overlay: rgb(17 17 17 / 0.45);
+
+  /* ---------- Typography ---------- */
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+
+  /* Fluid display sizes for editorial headings; fixed sizes for UI copy. */
+  --text-display: clamp(2.75rem, 1.6rem + 5vw, 6rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.015em;
+  --text-h1: clamp(2.125rem, 1.6rem + 2.4vw, 3.75rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h2: clamp(1.625rem, 1.3rem + 1.4vw, 2.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-lead: 1.0625rem;
+  --text-lead--line-height: 1.65;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.6;
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.5;
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1.3;
+  --text-label--letter-spacing: 0.14em;
+
+  --tracking-label: 0.14em;
+  --tracking-wide-ui: 0.08em;
+
+  /* ---------- Spacing & layout ---------- */
+  /* Tailwind's 0.25rem base scale stays; these add semantic, fluid steps. */
+  --spacing-gutter: clamp(1rem, 0.6rem + 1.8vw, 2.5rem); /* page side padding */
+  --spacing-section: clamp(3.5rem, 2rem + 6vw, 8rem); /* vertical rhythm between sections */
+  --spacing-header: 3.5rem;
+  --spacing-header-lg: 4.5rem;
+
+  --container-page: 100rem; /* 1600px max content width */
+  --container-content: 80rem;
+  --container-narrow: 38rem;
+
+  /* ---------- Shape & motion ---------- */
+  --radius-*: initial;
+  --radius-none: 0;
+  --radius-full: 9999px; /* only for swatches / icon dots */
+
+  --ease-luxe: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --default-transition-duration: 250ms;
+  --default-transition-timing-function: var(--ease-luxe);
+
+  --aspect-product: 4 / 5;
+  --aspect-hero: 16 / 9;
+  --aspect-portrait: 3 / 4;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------- Layout utilities ---------- */
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility section-y {
+  padding-block: var(--spacing-section);
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+  border-style: solid;
+  border-width: 0;
+}
+
+/* ---------- Typography utilities ---------- */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--tracking-label);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* ---------- Buttons ---------- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  padding-inline: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition-property: color, background-color, border-color, opacity;
+  transition-duration: var(--default-transition-duration);
+  transition-timing-function: var(--ease-luxe);
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-ink-soft);
+      border-color: var(--color-ink-soft);
+    }
+  }
+}
+
+@utility btn-secondary {
+  background-color: transparent;
+  border-color: var(--color-line-strong);
+  color: var(--color-ink);
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-ink);
+      color: var(--color-paper);
+    }
+  }
+}
+
+/* For use on top of imagery. */
+@utility btn-inverse {
+  background-color: var(--color-paper);
+  border-color: var(--color-paper);
+  color: var(--color-ink);
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: transparent;
+      color: var(--color-paper);
+    }
+  }
+}
+
+@utility btn-sm {
+  min-height: 2.5rem;
+  padding-inline: 1.25rem;
+}
+
+@utility btn-block {
+  width: 100%;
+}
+
+/* ---------- Links ---------- */
+/* Underline that draws in from the left on hover. */
+@utility link-reveal {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  padding-bottom: 1px;
+  transition: background-size var(--default-transition-duration) var(--ease-luxe);
+
+  @media (hover: hover) {
+    &:hover {
+      background-size: 100% 1px;
+    }
+  }
+
+  &[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+}
+
+/* Persistently underlined, used inline in copy and for "Discover" CTAs. */
+@utility link-underline {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: color var(--default-transition-duration) var(--ease-luxe);
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-muted);
+    }
+  }
+}
