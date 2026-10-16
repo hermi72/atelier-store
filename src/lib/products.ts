@@ -2,7 +2,7 @@ import "server-only";
 import { desc, eq, ne, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { products, type CategoryRow, type ProductRow, type ProductStockRow } from "@/db/schema";
+import { categories, products, type CategoryRow, type ProductRow, type ProductStockRow } from "@/db/schema";
 import type { CatalogImage, Product } from "@/lib/catalog";
 
 // Server-side catalog reads. Results are cached so product pages and the
@@ -66,6 +66,39 @@ export async function getNewArrivals(limit = 8) {
     with: withRelations,
   });
   return rows.map(toProduct);
+}
+
+export async function getCategorySlugs() {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag(PRODUCTS_TAG);
+
+  const rows = await db.select({ slug: categories.slug }).from(categories);
+  return rows.map((row) => row.slug);
+}
+
+/** A category and its products, newest first. */
+export async function getCategory(slug: string) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag(PRODUCTS_TAG);
+
+  const row = await db.query.categories.findFirst({
+    where: eq(categories.slug, slug),
+    with: {
+      products: {
+        orderBy: [desc(products.createdAt), desc(products.id)],
+        with: { stock: true },
+      },
+    },
+  });
+  if (!row) return undefined;
+
+  const { products: productRows, ...category } = row;
+  return {
+    name: category.name,
+    products: productRows.map((product) => toProduct({ ...product, category })),
+  };
 }
 
 /** Same-category pieces first, then the rest of the catalog. */
